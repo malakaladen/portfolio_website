@@ -1,50 +1,52 @@
-const observer = new IntersectionObserver((entries) =>{
-    entries.forEach(entry => {
-        if(entry.isIntersecting){
-            entry.target.classList.add("show");
-        }
+const menuButton = document.querySelector(".menu-toggle");
+const navLinks = document.querySelector(".nav-links");
+
+if (menuButton && navLinks) {
+  menuButton.addEventListener("click", () => {
+    const isOpen = navLinks.classList.toggle("open");
+    menuButton.setAttribute("aria-expanded", String(isOpen));
+    menuButton.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
+    menuButton.innerHTML = isOpen
+      ? '<i class="fa-solid fa-xmark"></i>'
+      : '<i class="fa-solid fa-bars"></i>';
+  });
+
+  navLinks.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("open");
+      menuButton.setAttribute("aria-expanded", "false");
+      menuButton.setAttribute("aria-label", "Open navigation");
+      menuButton.innerHTML = '<i class="fa-solid fa-bars"></i>';
     });
-});
+  });
+}
 
-document.querySelectorAll(".fade-up").forEach(section =>{
-    observer.observe(section);
-});
-
-const roles=[
-    "Front-End Developer",
-    "Computer Science Student",
-    "UI Enthusiast"
-];
-
-let roleIndex =0;
-let charIndex =0;
-
+const roles = ["web experiences.", "thoughtful interfaces.", "things that help people."];
 const typingElement = document.querySelector(".typing");
+let roleIndex = 0;
+let charIndex = 0;
+let deleting = false;
 
-function typeRole(){
-    if(charIndex < roles[roleIndex].length){
-        typingElement.textContent += roles[roleIndex].charAt(charIndex);
-        charIndex++;
-        setTimeout(typeRole,70);
+function animateRole() {
+  if (!typingElement) return;
+  const current = roles[roleIndex];
+
+  if (!deleting) {
+    charIndex++;
+    typingElement.textContent = current.slice(0, charIndex);
+    if (charIndex === current.length) {
+      deleting = true;
+      window.setTimeout(animateRole, 1500);
+      return;
     }
-    else{
-        setTimeout(eraseRole,1800);
+  } else {
+    charIndex--;
+    typingElement.textContent = current.slice(0, charIndex);
+    if (charIndex === 0) {
+      deleting = false;
+      roleIndex = (roleIndex + 1) % roles.length;
     }
+  }
+  window.setTimeout(animateRole, deleting ? 38 : 75);
 }
-
-function eraseRole(){
-    if(charIndex>0){
-        typingElement.textContent = roles[roleIndex].substring(0,charIndex-1);
-        charIndex--;
-        setTimeout(eraseRole,40);
-    }
-
-    else{
-        roleIndex++;
-        if(roleIndex>=roles.length){
-            roleIndex=0;
-        }
-        setTimeout(typeRole,300);
-    }
-}
-typeRole();
+if (typingElement) window.setTimeout(animateRole, 500);
