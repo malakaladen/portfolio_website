@@ -136,3 +136,19 @@ button,input,textarea{font:inherit}
     opacity:0;
   }
 }
+/* Technology Icons */
+.skill-icon {
+    font-size: 42px;
+    margin-bottom: 14px;
+}
+
+.html-icon { color: #E34F26; }
+.css-icon { color: #1572B6; }
+.js-icon { color: #F7DF1E; }
+.vue-icon { color: #42B883; }
+.git-icon { color: #F05032; }
+.python-icon { color: #3776AB; }
+.cpp-icon { color: #659AD2; }
+.java-icon { color: #E76F00; }
+.django-icon { color: #44B78B; }
+.sql-icon { color: #00758F; }
